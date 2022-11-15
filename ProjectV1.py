@@ -22,19 +22,19 @@ def index():
 @app.route('/projects')
 def get_projects():
 
-    return 1
+    return render_template('projects.html', projects=projects)
 
 #view particular project
 @app.route('/projects/<project_id>')
 def get_project():
 
-    return 1
+    return render_template('project.html')
 
 #create project
 @app.route('/projects/new')
 def create_project():
 
-    return 1
+    return render_template('new.html')
 
 
 #edit project
