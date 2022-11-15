@@ -12,6 +12,7 @@ projects = {1: {'name': 'project1', 'description': 'first mock project on the li
 }
 
 #main menu
+@app.route('/')
 @app.route('/index')
 def index():
     
