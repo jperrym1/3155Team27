@@ -1,0 +1,13 @@
+table,tr,td,th{
+    border: 1px solid;
+    text-align: left;
+}
+th, td{
+    padding: 5px;
+}
+table{
+    border-collapse: collapse;
+    -webkit-box-shadow: 7px 7px 5px 0px rgba(50, 50, 50, 0.50);
+    -moz-box-shadow:    7px 7px 5px 0px rgba(50, 50, 50, 0.50);
+    box-shadow:         7px 7px 5px 0px rgba(50, 50, 50, 0.50);
+}
