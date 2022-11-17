@@ -16,5 +16,23 @@
             </nav>
             <h1>Welcome to The Cubed Project Management Application, {{user.name}}, We hope you have a great day!</h1>
         </header>
+        <table>
+            <tr>
+                <th>Title</th>
+                <th>Description</th>
+                <th>Members</th>
+            </tr>
+            <tr>
+                <td>{{ project.name }}</td>
+                <td>{{ project.description }}</td>
+                <td>
+                    {% for member in project.members %}
+                    <ul>
+                        <li>{{ member }}</li>
+                    </ul>
+                    {% endfor %}
+                </td>
+            </tr>
+        </table>
     </body>
 </html>
