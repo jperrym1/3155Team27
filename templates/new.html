@@ -8,5 +8,13 @@
         <title>Cubed Project Management - New Project</title>
     </head>
     <body>
+        <header>
+            <nav>
+                <a href="{{url_for('index')}}">Home</a>
+                <a href="{{url_for('get_projects')}}">View Projects</a>
+                <a href="{{url_for('create_project')}}">Create Project</a>
+            </nav>
+            <h1>Welcome to The Cubed Project Management Application, {{user.first_name}}, We hope you have a great day!</h1>
+        </header>
     </body>
 </html>
