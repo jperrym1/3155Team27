@@ -2,7 +2,7 @@
 
 import os
 from flask import Flask
-from flask import render_template
+from flask import render_template, request, redirect, url_for, session
 
 app = Flask(__name__)
 
@@ -10,13 +10,17 @@ projects = {1: {'name': 'project1', 'description': 'first mock project on the li
             2: {'name': 'project2', 'description': 'second mock project', 'members': 'Sam, Gina, Tom'},
             3: {'name': 'project3', 'desciption': 'third mock project', 'members': 'Tina, Dana, Fred'} 
 }
-
+a_user = {
+    'first_name' : 'John',
+    'last_name' : 'Doe',
+    'email' : 'jdoe@uncc.edu'
+}
 #main menu
 @app.route('/')
 @app.route('/index')
 def index():
     
-    return render_template('index.html')
+    return render_template('index.html', user=a_user)
 
 #view list of projects
 @app.route('/projects')
