@@ -8,25 +8,17 @@
         <title>Cubed Project Management</title>
     </head>
     <body>
-        <header>
         <nav>
             <a href="{{url_for('index')}}">Home</a>
             <a href="{{url_for('get_projects')}}">View Projects</a>
             <a href="{{url_for('create_project')}}">Create Project</a>
         </nav>
         <h1>Welcome to The Cubed Project Management Application, {{user.first_name}}, We hope you have a great day!</h1>
-        </header>
-        <main>
         <h2>This site is used to manage and organize Tasks and Projects</h2>
         <div class="menu-list">
-            <div class="menu-item"><a href="{{url_for('index')}}">Home</a></div>
-            <div class="menu-item"><a href="{{url_for('get_projects')}}">View Projects</a></div>
-            <div class="menu-item"><a href="{{url_for('create_project')}}">Create Project</a></div>
+            <a href="{{url_for('index')}}">Home</a>
+            <a href="{{url_for('get_projects')}}">View Projects</a>
+            <a href="{{url_for('create_project')}}">Create Project</a>
         </div>
-        </div>
-    </main>
-    <footer>
-        
-    </footer>
     </body>
 </html>
