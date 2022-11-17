@@ -17,8 +17,9 @@ projects = {1: {'name': 'project1', 'description': 'first mock project on the li
 @app.route('/')
 @app.route('/index')
 def index():
-    
-    return render_template('index.html')
+    tempUser = {'name': 'admin', 'email': 'admin@3cubed.com'}
+
+    return render_template('index.html', user=tempUser)
 
 #view list of projects
 @app.route('/projects')
@@ -49,15 +50,17 @@ def create_project():
 
 
 #edit project
-@app.route('/projects/edit/<project_id>')
-def edit_project():
-
+@app.route('/projects/edit/<project_id>', methods=['GET', 'POST'])
+def edit_project(project_id):
+    
     return 1
 
 #delete project
 @app.route('/projects/delete/<project_id>')
-def delete_project():
-
-    return 1
+def delete_project(project_id):
+    for i in projects:
+        if projects[project_id] == projects[i]:
+            del projects[i]
+    return redirect(url_for('projects.html'))
     
 app.run(host=os.getenv('IP', '127.0.0.1'), port=int(os.getenv('PORT', 5000)), debug=True)
