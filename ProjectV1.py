@@ -3,6 +3,8 @@
 import os
 from flask import Flask
 from flask import render_template
+from flask import request
+from flask import redirect, url_for
 
 app = Flask(__name__)
 
@@ -33,8 +35,17 @@ def get_project():
 #create project
 @app.route('/projects/new')
 def create_project():
+    tempUser = {'name': 'admin', 'email': 'admin@3cubed.com'}
 
-    return render_template('new.html')
+    if request.method == 'POST':
+        name = request.form['name']
+        description = request.form['description']
+        members = request.form['members']
+        id = len(projects)+1
+        projects[id] = {'name': name, 'description': description, 'members': members}
+        return redirect(url_for('get_projects'))
+    else:
+        return render_template('new.html', user=tempUser)
 
 
 #edit project
