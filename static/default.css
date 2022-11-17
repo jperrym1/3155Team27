@@ -1,29 +1,74 @@
+:root{
+    --cream: #F4E3B2;
+    --dark_grey: #2E3532;
+    --periwinkle: #C4C6E7;
+}
+/* 
 body {
     width: 100%;
     height: 100vh;
     margin: 0;
-    background-color: azure;
-    color: #032950;
+    background-color: var(--dark_grey);
     font-family: Tahoma;
     font-size: 16px;
   }
+
+header{
+  color: var(--periwinkle);
+}
   
-  h1, p {
+main{
+    width: 80%;
+    background-color: var(--cream);
+    margin-left: auto;
+    margin-right: auto;
+    padding: 20px;
+    max-width: 1000px;
+}
+h1, p {
     margin: 1em auto;
     text-align: center;
-  }
+}
+a{
+  color: var(--periwinkle);
+} */
+body{
+  width:60%;
+  margin: 1em auto 0 auto;
+}
 
-  .menu-list{
-    display: flex;
-    font-size: 20px;
-    justify-content: center;
-  }
+nav a{
+  padding: 5px 5px 5px 5px;
+  border: 2px solid black;
+  margin: 5px;
+  color: black;
+  text-decoration: none;
+}
 
-  .menu-list a{
-    color:#059c35;
-    text-decoration: none;
-    padding: 15px;
-    margin: 5px;
-    background-color: aqua;
-    border: 5px solid #bbb ;
-  }
+nav a:hover{
+  background-color: black;
+  color: white;
+}
+
+.menu-list{
+  width: 30%;
+  margin: 0 auto;
+  font-size: 3em;
+}
+
+.menu-item{
+  padding: 5px 5px 5px 15px;
+  border: 2px solid black;
+  margin: 5px;
+  color: black;
+}
+
+.menu-item:hover{
+  background-color: black;
+  color: white;
+}
+
+.menu-item a{
+  text-decoration: none;
+  color: inherit;
+}
