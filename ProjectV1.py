@@ -34,7 +34,7 @@ def get_project(project_id):
     return render_template('project.html', project=projects[int(project_id)],user=tempUser)
 
 #create project
-@app.route('/projects/new', method=['GET', 'POST'])
+@app.route('/projects/new', methods=['GET', 'POST'])
 def create_project():
     tempUser = {'name': 'admin', 'email': 'admin@3cubed.com'}
 
