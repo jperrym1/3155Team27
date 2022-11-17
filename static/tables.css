@@ -7,7 +7,7 @@ th, td{
 }
 table{
     border-collapse: collapse;
-    -webkit-box-shadow: 7px 7px 5px 0px rgba(50, 50, 50, 0.50);
-    -moz-box-shadow:    7px 7px 5px 0px rgba(50, 50, 50, 0.50);
-    box-shadow:         7px 7px 5px 0px rgba(50, 50, 50, 0.50);
+    -webkit-box-shadow: 10px 10px 15px 0px rgba(50, 50, 50, 0.50);
+    -moz-box-shadow:    10px 10px 15px 0px rgba(50, 50, 50, 0.50);
+    box-shadow:         10px 10px 15px 0px rgba(50, 50, 50, 0.50);
 }

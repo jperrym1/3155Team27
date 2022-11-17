@@ -5,6 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="description" content="Cubed Project Management">
         <link rel="stylesheet" href="{{ url_for('static', filename='default.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='tables.css') }}">
         <title>Cubed Project Management - View your Project</title>
     </head>
     <body>
@@ -16,5 +17,26 @@
             </nav>
             <h1>Welcome to The Cubed Project Management Application, {{user.name}}, We hope you have a great day!</h1>
         </header>
+        <main>
+            <table>
+                <tr>
+                    <th>Project Name</th>
+                    <th>Description</th>
+                    <th>Members</th>
+                </tr>
+                <tr>
+                    <td>{{ project.name }}</td>
+                    <td>{{ project.description }}</td>
+                    <td>
+                        <ul>
+                            {% for member in project.members %}
+                            <li>{{member}}</li>
+                            {% endfor %}
+                        </ul>
+                    </td>
+                    
+                </tr>
+            </table>
+        </main>
     </body>
 </html>

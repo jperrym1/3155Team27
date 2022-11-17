@@ -34,7 +34,7 @@ def get_project(project_id):
     return render_template('project.html', project=projects[int(project_id)],user=tempUser)
 
 #create project
-@app.route('/projects/new')
+@app.route('/projects/new', method=['GET', 'POST'])
 def create_project():
     tempUser = {'name': 'admin', 'email': 'admin@3cubed.com'}
 
@@ -52,7 +52,15 @@ def create_project():
 #edit project
 @app.route('/projects/edit/<project_id>', methods=['GET', 'POST'])
 def edit_project(project_id):
-    
+    if request.method == 'POST':
+            name = request.form['name']
+
+            desc = request.form['projectDesc']
+            
+            return redirect(url_for('get_projects'))
+    else:
+        project = projects[int(project_id)]
+        return render_template('new.html', project=project, user=tempUser)
     return 1
 
 #delete project
