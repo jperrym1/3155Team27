@@ -12,7 +12,11 @@ projects = {1: {'name': 'project1', 'description': 'first mock project on the li
             2: {'name': 'project2', 'description': 'second mock project', 'members': 'Sam, Gina, Tom'},
             3: {'name': 'project3', 'desciption': 'third mock project', 'members': 'Tina, Dana, Fred'} 
 }
-
+a_user = {
+    'first_name' : 'John',
+    'last_name' : 'Doe',
+    'email' : 'jdoe@uncc.edu'
+}
 #main menu
 @app.route('/')
 @app.route('/index')
