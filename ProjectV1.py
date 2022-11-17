@@ -2,7 +2,9 @@
 
 import os
 from flask import Flask
-from flask import render_template, request, redirect, url_for, session
+from flask import render_template
+from flask import request
+from flask import redirect, url_for
 
 app = Flask(__name__)
 
@@ -19,8 +21,9 @@ a_user = {
 @app.route('/')
 @app.route('/index')
 def index():
-    
-    return render_template('index.html', user=a_user)
+    tempUser = {'name': 'admin', 'email': 'admin@3cubed.com'}
+
+    return render_template('index.html', user=tempUser)
 
 #view list of projects
 @app.route('/projects')
@@ -37,20 +40,31 @@ def get_project():
 #create project
 @app.route('/projects/new')
 def create_project():
+    tempUser = {'name': 'admin', 'email': 'admin@3cubed.com'}
 
-    return render_template('new.html')
+    if request.method == 'POST':
+        name = request.form['name']
+        description = request.form['description']
+        members = request.form['members']
+        id = len(projects)+1
+        projects[id] = {'name': name, 'description': description, 'members': members}
+        return redirect(url_for('get_projects'))
+    else:
+        return render_template('new.html', user=tempUser)
 
 
 #edit project
-@app.route('/projects/edit/<project_id>')
-def edit_project():
-
+@app.route('/projects/edit/<project_id>', methods=['GET', 'POST'])
+def edit_project(project_id):
+    
     return 1
 
 #delete project
 @app.route('/projects/delete/<project_id>')
-def delete_project():
-
-    return 1
+def delete_project(project_id):
+    for i in projects:
+        if projects[project_id] == projects[i]:
+            del projects[i]
+    return redirect(url_for('projects.html'))
     
 app.run(host=os.getenv('IP', '127.0.0.1'), port=int(os.getenv('PORT', 5000)), debug=True)
