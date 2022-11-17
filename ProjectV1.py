@@ -22,7 +22,7 @@ def index():
     return render_template('index.html', user=tempUser)
 
 #view list of projects
-@app.route('/projects')
+@app.route('/projects', methods=['GET', 'POST'])
 def get_projects():
 
     return render_template('projects.html', projects=projects, user=tempUser)
@@ -40,8 +40,8 @@ def create_project():
 
     if request.method == 'POST':
         name = request.form['name']
-        description = request.form['description']
-        members = request.form['members']
+        description = request.form['projectDesc']
+        members = request.form['projectMembers'].split(',')
         id = len(projects)+1
         projects[id] = {'name': name, 'description': description, 'members': members}
         return redirect(url_for('get_projects'))
@@ -54,21 +54,22 @@ def create_project():
 def edit_project(project_id):
     if request.method == 'POST':
             name = request.form['name']
-
-            desc = request.form['projectDesc']
-            
+            description = request.form['projectDesc']
+            members = request.form['projectMembers'].split(',')
+            id = int(project_id)
+            projects[id] = {'name': name, 'description': description, 'members': members}
             return redirect(url_for('get_projects'))
     else:
         project = projects[int(project_id)]
-        return render_template('new.html', project=project, user=tempUser)
+        return render_template('new.html', project=project, user=tempUser, project_id=project_id)
     return 1
 
 #delete project
-@app.route('/projects/delete/<project_id>')
+@app.route('/projects/delete/<project_id>', methods=['GET', 'POST'])
 def delete_project(project_id):
-    for i in projects:
-        if projects[project_id] == projects[i]:
-            del projects[i]
-    return redirect(url_for('projects.html'))
+    # key = projects.get(project_id, None)
+    # if key:
+    del projects[int(project_id)]
+    return redirect(url_for('get_projects'))
     
 app.run(host=os.getenv('IP', '127.0.0.1'), port=int(os.getenv('PORT', 5000)), debug=True)

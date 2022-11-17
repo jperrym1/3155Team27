@@ -18,21 +18,18 @@
         </header>
         <main>
             {% if project %} 
-            <form action="{{ url_for('edit_project', project_id = note.id) }}" method="post">
-        {% else %}
+            <form action="{{ url_for('edit_project', project_id=project_id) }}" method="post">
+            {% else %}
             <form action="new" method="post">
-        {% endif %}
+            {% endif %}
            <p><label for="name">Project Name </label></p><p>  <input id='name' type="text" name="name" value="{% if project %}{{project.name}}{% endif %}"/></p>
             <p><label for="projectDesc">Description </label></p><p>
-                <textarea id='projectDesc' name="projectDesc"  rows="6" cols="0" placeholder="enter your" >
-                    {% if note %} 
-                        {{project.description}}
-                    {% endif %}
-                </textarea>
+                <textarea id='projectDesc' name="projectDesc"  rows="6" cols="0" placeholder="enter your project description" >{% if project %}{{project.description}}{% endif %}</textarea>
             </p>
-            <p><label for="projectMembers"></label></p>
+            <p><label for="projectMembers">Members (Separate member names by commas)</label></p>
+            <p><input type="text" id="projectMembers" name="projectMembers" value='{% if project %}{{",".join(project.members)}}{% endif %}'></p>
             <p>
-                {% if note %}
+                {% if project %}
                     <input type="submit" value="Update Project"/>
                 {% else %}
                     <input type="submit" value="Add Project">
