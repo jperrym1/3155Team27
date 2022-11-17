@@ -8,9 +8,9 @@ from flask import redirect, url_for
 
 app = Flask(__name__)
 
-projects = {1: {'name': 'project1', 'description': 'first mock project on the list', 'members': 'Bob, Mark, Francine'},
-            2: {'name': 'project2', 'description': 'second mock project', 'members': 'Sam, Gina, Tom'},
-            3: {'name': 'project3', 'description': 'third mock project', 'members': 'Tina, Dana, Fred'} 
+projects = {1: {'name': 'project1', 'description': 'first mock project on the list', 'members': ['Bob', 'Mark', 'Francine']},
+            2: {'name': 'project2', 'description': 'second mock project', 'members': ['Sam', 'Gina', 'Tom']},
+            3: {'name': 'project3', 'description': 'third mock project', 'members': ['Tina', 'Dana', 'Fred']} 
 }
 tempUser = {'name': 'admin', 'email': 'admin@3cubed.com'}
 #main menu
