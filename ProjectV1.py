@@ -42,7 +42,7 @@ def create_project():
         name = request.form['name']
         description = request.form['projectDesc']
         members = request.form['projectMembers'].split(',')
-        id = len(projects)+1
+        id = max(projects)+1
         projects[id] = {'name': name, 'description': description, 'members': members}
         return redirect(url_for('get_projects'))
     else:
