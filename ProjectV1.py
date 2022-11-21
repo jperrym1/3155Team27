@@ -3,10 +3,19 @@
 import os
 from flask import Flask
 from flask import render_template
-from flask import request
+from flask import request, session
 from flask import redirect, url_for
+from database import db
 
 app = Flask(__name__)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///cubed_app.db'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS']= False
+app.config['SECRET_KEY'] = '311527'
+
+db.init_app(app)
+
+with app.app_context():
+    db.create_all()
 
 projects = {1: {'name': 'project1', 'description': 'first mock project on the list', 'members': ['Bob', 'Mark', 'Francine']},
             2: {'name': 'project2', 'description': 'second mock project', 'members': ['Sam', 'Gina', 'Tom']},
@@ -17,14 +26,16 @@ tempUser = {'name': 'admin', 'email': 'admin@3cubed.com'}
 @app.route('/')
 @app.route('/index')
 def index():
-    tempUser = {'name': 'admin', 'email': 'admin@3cubed.com'}
-
-    return render_template('index.html', user=tempUser)
+    if session.get('user'):
+        return render_template('index.html', user=session['user'])
+    return render_template('index.html')
 
 #view list of projects
 @app.route('/projects')
 def get_projects():
-
+    if session.get('user'):
+        projects = db.session.query()
+        return render_template('projects.html', user=session['user'])
     return render_template('projects.html', projects=projects, user=tempUser)
 
 #view particular project
