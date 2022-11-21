@@ -9,11 +9,21 @@
     </head>
     <body>
         <nav>
-            <a href="{{url_for('index')}}">Home</a>
-            <a href="{{url_for('get_projects')}}">View Projects</a>
-            <a href="{{url_for('create_project')}}">Create Project</a>
+            {% if user %}
+                <a href="{{ url_for('logout') }}">Logout</a>
+                {% else %}
+                <a href="{{ url_for('login') }}">Sign In</a>
+                <a href="{{ url_for('register') }}">Register</a>
+                {% endif %}
+                <a href="{{url_for('index')}}">Home</a>
+                <a href="{{url_for('get_projects')}}">View Projects</a>
+                <a href="{{url_for('create_project')}}">Create Project</a>
         </nav>
-        <h1>Welcome to The Cubed Project Management Application, {{user.name}}, We hope you have a great day!</h1>
+        {% if user %}
+        <h1>Welcome to The Cubed Project Management Application, {{user}}, We hope you have a great day!</h1>
+        {% else %}
+        <h1>Welcome to The Cubed Project Management Application, We hope you have a great day!</h1>
+        {% endif %}
         <h2>This site is used to manage and organize Tasks and Projects</h2>
         <div class="menu-list">
             <div class="menu-item"><a href="{{url_for('index')}}">Home</a></div>

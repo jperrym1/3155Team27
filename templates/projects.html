@@ -11,6 +11,12 @@
     <body>
         <header>
             <nav>
+                {% if user %}
+                <a href="{{ url_for('logout') }}">Logout</a>
+                {% else %}
+                <a href="{{ url_for('login') }}">Sign In</a>
+                <a href="{{ url_for('register') }}">Register</a>
+                {% endif %}
                 <a href="{{url_for('index')}}">Home</a>
                 <a href="{{url_for('get_projects')}}">View Projects</a>
                 <a href="{{url_for('create_project')}}">Create Project</a>
@@ -24,13 +30,13 @@
                     <th>Description</th>
                     <th>Members</th>
                 </tr>
-                {% for key,value in projects.items() %}
+                {% for project in projects %}
                 <tr>
-                    <td><a href='{{ url_for("get_project", project_id=key) }}'>{{ value.name }}</a></td>
-                    <td>{{ value.description }}</td>
+                    <td><a href='{{ url_for("get_project", project_id=project.id) }}'>{{ project.title }}</a></td>
+                    <td>{{ project.description }}</td>
                     <td>
                         <ul>
-                            {% for member in value.members %}
+                            {% for member in project.members.split(',') %}
                             <li>{{member}}</li>
                             {% endfor %}
                         </ul>
