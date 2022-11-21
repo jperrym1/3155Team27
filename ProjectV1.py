@@ -8,7 +8,7 @@ from flask import redirect, url_for
 from database import db
 from data_models import Project as Project
 from data_models import User as User
-from views import LoginView
+from views import LoginView, RegisterView, CreateProjectView
 import bcrypt
 
 app = Flask(__name__)
@@ -21,11 +21,6 @@ db.init_app(app)
 with app.app_context():
     db.create_all()
 
-projects = {1: {'name': 'project1', 'description': 'first mock project on the list', 'members': ['Bob', 'Mark', 'Francine']},
-            2: {'name': 'project2', 'description': 'second mock project', 'members': ['Sam', 'Gina', 'Tom']},
-            3: {'name': 'project3', 'description': 'third mock project', 'members': ['Tina', 'Dana', 'Fred']} 
-}
-tempUser = {'name': 'admin', 'email': 'admin@3cubed.com'}
 #main menu
 @app.route('/')
 @app.route('/index')
@@ -51,17 +46,19 @@ def get_project(project_id):
 #create project
 @app.route('/projects/new', methods=['GET', 'POST'])
 def create_project():
-    tempUser = {'name': 'admin', 'email': 'admin@3cubed.com'}
-
-    if request.method == 'POST':
-        name = request.form['name']
-        description = request.form['projectDesc']
-        members = request.form['projectMembers'].split(',')
-        id = max(projects)+1
-        projects[id] = {'name': name, 'description': description, 'members': members}
-        return redirect(url_for('get_projects'))
+    if session.get('user'):
+        form = CreateProjectView()
+        if request.method == 'POST' and form.validate_on_submit():
+            project_name = request.form['project_name']
+            description = request.form['description']
+            members = request.form['members']
+            new_project = Project(project_name, description, session['user_id'], members)
+            db.session.add(new_project)
+            db.session.commit()
+            return redirect(url_for('get_projects'))
+        return render_template('new.html', form=form, user=session['user'])
     else:
-        return render_template('new.html', user=tempUser)
+        redirect(url_for('login'))
 
 
 #edit project
@@ -89,8 +86,8 @@ def delete_project(project_id):
     
 @app.route('/login', methods=['GET','POST'])
 def login():
-    login_form = LoginView()
-    if login_form.validate_on_submit():
+    login = LoginView()
+    if login.validate_on_submit():
         the_user = db.session.query(User).filter_by(email=request.form['email']).one()
         if bcrypt.checkpw(request.form['password'].encode('utf-8'), the_user.password):
             # password match add user info to session
@@ -101,10 +98,34 @@ def login():
 
         # password check failed
         # set error message to alert user
-        login_form.password.errors = ["Incorrect username or password."]
-        return render_template("login.html", form=login_form)
+        login.password.errors = ["Incorrect username or password."]
+        return render_template("login.html", form=login)
     else:
         # form did not validate or GET request
-        return render_template("login.html", form=login_form)
+        return render_template("login.html", form=login)
+
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    form = RegisterView()
+    if request.method == 'POST' and form.validate_on_submit():
+        h_password = bcrypt.hashpw(
+            request.form['password'].encode('utf-8'), bcrypt.gensalt()
+        )
+        first_name= request.form['firstname']
+        last_name= request.form['lastname']
+        new_user = User(first_name,last_name, request.form['email'], h_password)
+        db.session.add(new_user)
+        db.session.commit()
+        session['user'] = first_name
+        session['user_id'] = new_user.id
+        return redirect(url_for('get_projects'))
+    return render_template('register.html', form=form)
+
+@app.route('/logout')
+def logout():
+    if session.get('user'):
+        session.clear()
+    return redirect(url_for('index'))
+
 
 app.run(host=os.getenv('IP', '127.0.0.1'), port=int(os.getenv('PORT', 5000)), debug=True)
