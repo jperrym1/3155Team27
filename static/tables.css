@@ -3,7 +3,8 @@ table,tr,td,th{
     text-align: left;
 }
 th, td{
-    padding: 5px;
+    padding: 5px 10px 5px 10px;
+    min-width: 100px;
 }
 table{
     border-collapse: collapse;
