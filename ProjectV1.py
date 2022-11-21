@@ -6,6 +6,10 @@ from flask import render_template
 from flask import request, session
 from flask import redirect, url_for
 from database import db
+from data_models import Project as Project
+from data_models import User as User
+from views import LoginView
+import bcrypt
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///cubed_app.db'
@@ -34,9 +38,9 @@ def index():
 @app.route('/projects', methods=['GET', 'POST'])
 def get_projects():
     if session.get('user'):
-        projects = db.session.query()
-        return render_template('projects.html', user=session['user'])
-    return render_template('projects.html', projects=projects, user=tempUser)
+        projects = db.session.query(Project).filter_by(user_id=session['user_id']).all()
+        return render_template('projects.html', user=session['user'], projects=projects)
+    return redirect(url_for('login'))
 
 #view particular project
 @app.route('/projects/<project_id>')
@@ -83,4 +87,24 @@ def delete_project(project_id):
     del projects[int(project_id)]
     return redirect(url_for('get_projects'))
     
+@app.route('/login', methods=['GET','POST'])
+def login():
+    login_form = LoginView()
+    if login_form.validate_on_submit():
+        the_user = db.session.query(User).filter_by(email=request.form['email']).one()
+        if bcrypt.checkpw(request.form['password'].encode('utf-8'), the_user.password):
+            # password match add user info to session
+            session['user'] = the_user.first_name
+            session['user_id'] = the_user.id
+            # render view
+            return redirect(url_for('get_projects'))
+
+        # password check failed
+        # set error message to alert user
+        login_form.password.errors = ["Incorrect username or password."]
+        return render_template("login.html", form=login_form)
+    else:
+        # form did not validate or GET request
+        return render_template("login.html", form=login_form)
+
 app.run(host=os.getenv('IP', '127.0.0.1'), port=int(os.getenv('PORT', 5000)), debug=True)
