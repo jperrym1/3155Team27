@@ -40,8 +40,9 @@ def get_projects():
 #view particular project
 @app.route('/projects/<project_id>')
 def get_project(project_id):
-
-    return render_template('project.html', project=projects[int(project_id)],user=tempUser)
+    if session.get('user'):
+        project = db.session.query(Project).filter_by(id=project_id).one()
+        return render_template('project.html', project=project,user=session['user'])
 
 #create project
 @app.route('/projects/new', methods=['GET', 'POST'])
@@ -64,25 +65,38 @@ def create_project():
 #edit project
 @app.route('/projects/edit/<project_id>', methods=['GET', 'POST'])
 def edit_project(project_id):
-    if request.method == 'POST':
-            name = request.form['name']
-            description = request.form['projectDesc']
-            members = request.form['projectMembers'].split(',')
-            id = int(project_id)
-            projects[id] = {'name': name, 'description': description, 'members': members}
+    if session.get('user'):
+        form = CreateProjectView()
+        if request.method == 'POST':
+            project_name = request.form['project_name']
+            description = request.form['description']
+            members = request.form['members']
+            modified_project = db.session.query(Project).filter_by(id=project_id).one()
+            modified_project.title = project_name
+            modified_project.description = description
+            modified_project.members = members
+            db.session.add(modified_project)
+            db.session.commit()
             return redirect(url_for('get_projects'))
+        else:
+            project = db.session.query(Project).filter_by(id=project_id).one()
+            form.members.data = project.members
+            form.project_name.data = project.title
+            form.description.data = project.description
+            return render_template('new.html', form=form, user=session['user'], project=project)
     else:
-        project = projects[int(project_id)]
-        return render_template('new.html', project=project, user=tempUser, project_id=project_id)
-    return 1
+        return redirect(url_for('login'))
 
 #delete project
-@app.route('/projects/delete/<project_id>', methods=['GET', 'POST'])
+@app.route('/projects/delete/<project_id>', methods=['POST'])
 def delete_project(project_id):
-    # key = projects.get(project_id, None)
-    # if key:
-    del projects[int(project_id)]
-    return redirect(url_for('get_projects'))
+    if session.get('user'):
+        my_project = db.session.query(Project).filter_by(id=project_id).one()
+        db.session.delete(my_project)
+        db.session.commit()
+        return redirect(url_for('get_projects'))
+    else:
+        return redirect(url_for('login'))
     
 @app.route('/login', methods=['GET','POST'])
 def login():
@@ -93,11 +107,7 @@ def login():
             # password match add user info to session
             session['user'] = the_user.first_name
             session['user_id'] = the_user.id
-            # render view
             return redirect(url_for('get_projects'))
-
-        # password check failed
-        # set error message to alert user
         login.password.errors = ["Incorrect username or password."]
         return render_template("login.html", form=login)
     else:

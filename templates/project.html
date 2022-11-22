@@ -15,7 +15,7 @@
                 <a href="{{url_for('get_projects')}}">View Projects</a>
                 <a href="{{url_for('create_project')}}">Create Project</a>
             </nav>
-            <h1>Welcome to The Cubed Project Management Application, {{user.name}}, We hope you have a great day!</h1>
+            <h1>Welcome to The Cubed Project Management Application, {{user}}, We hope you have a great day!</h1>
         </header>
         <main>
             <table>
@@ -25,11 +25,11 @@
                     <th>Members</th>
                 </tr>
                 <tr>
-                    <td>{{ project.name }}</td>
+                    <td>{{ project.title }}</td>
                     <td>{{ project.description }}</td>
                     <td>
                         <ul>
-                            {% for member in project.members %}
+                            {% for member in project.members.split(',') %}
                             <li>{{member}}</li>
                             {% endfor %}
                         </ul>
