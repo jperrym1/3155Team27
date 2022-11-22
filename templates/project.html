@@ -11,6 +11,12 @@
     <body>
         <header>
             <nav>
+                {% if user %}
+                <a href="{{ url_for('logout') }}">Logout</a>
+                {% else %}
+                <a href="{{ url_for('login') }}">Sign In</a>
+                <a href="{{ url_for('register') }}">Register</a>
+                {% endif %}
                 <a href="{{url_for('index')}}">Home</a>
                 <a href="{{url_for('get_projects')}}">View Projects</a>
                 <a href="{{url_for('create_project')}}">Create Project</a>

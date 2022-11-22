@@ -23,6 +23,7 @@ class Project(db.Model):
     date = db.Column('date', db.String(50))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     members = db.Column('members', db.String(255))
+    finished_user_stories = db.relationship('UserStory', backref='project', lazy=True)
     user_stories = db.relationship('UserStory', backref='project', lazy=True)
     def __init__(self, title, description, user_id, members):
         self.title = title
@@ -39,8 +40,8 @@ class UserStory(db.Model):
     project_id = db.Column(db.Integer, db.ForeignKey("project.id"), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
 
-    def __init__(self, scenario, note_id, user_id):
+    def __init__(self, scenario, project_id, user_id):
         self.date_created = datetime.date.today()
         self.scenario = scenario
-        self.note_id = note_id
+        self.project_id = project_id
         self.user_id = user_id
