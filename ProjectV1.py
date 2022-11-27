@@ -8,7 +8,8 @@ from flask import redirect, url_for
 from database import db
 from data_models import Project as Project
 from data_models import User as User
-from views import LoginView, RegisterView, CreateProjectView
+from data_models import Comment as Comment
+from views import LoginView, RegisterView, CreateProjectView, CommentOnProject
 import bcrypt
 
 app = Flask(__name__)
@@ -41,8 +42,9 @@ def get_projects():
 @app.route('/projects/<project_id>')
 def get_project(project_id):
     if session.get('user'):
-        project = db.session.query(Project).filter_by(id=project_id).one()
-        return render_template('project.html', project=project,user=session['user'])
+        project = db.session.query(Project).filter_by(id=project_id, user_id=session['user_id']).one()
+        form = CommentOnProject()
+        return render_template('project.html', project=project,user=session['user'], form=form)
 
 #create project
 @app.route('/projects/new', methods=['GET', 'POST'])
@@ -137,5 +139,19 @@ def logout():
         session.clear()
     return redirect(url_for('index'))
 
+@app.route('/projects/<project_id>/comment', methods=['GET','POST'])
+def project_comment(project_id):
+    if session.get('user'):
+        comment = CommentOnProject()
 
+        if comment.validate_on_submit() and request.method=='POST':
+            comment_text = request.form['comment']
+            new_comment = Comment(comment_text, project_id)
+           # new_comment = Comment(comment_text, int(project_id), session['user_id'])
+            db.session.add(new_comment)
+            db.session.commit()
+        return redirect(url_for('get_project', project_id=project_id))
+    else:
+        return redirect(url_for('login'))
+        
 app.run(host=os.getenv('IP', '127.0.0.1'), port=int(os.getenv('PORT', 5000)), debug=True)

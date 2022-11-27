@@ -25,6 +25,8 @@ class Project(db.Model):
     members = db.Column('members', db.String(255))
     finished_user_stories = db.relationship('UserStory', backref='project', lazy=True)
     user_stories = db.relationship('UserStory', backref='project', lazy=True)
+    comments = db.relationship('Comment', backref='project', cascade='all, delete-orphan', lazy=True)
+    
     def __init__(self, title, description, user_id, members):
         self.title = title
         self.description = description
@@ -45,3 +47,12 @@ class UserStory(db.Model):
         self.scenario = scenario
         self.project_id = project_id
         self.user_id = user_id
+
+class Comment(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    comment = db.Column(db.VARCHAR, nullable=False)
+    project_id = db.Column(db.Integer, db.ForeignKey('project.id'), nullable=False)
+
+    def __init__(self, comment, project_id):
+        self.comment = comment
+        self.project_id = project_id
