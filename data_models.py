@@ -8,7 +8,7 @@ class User(db.Model):
     password = db.Column(db.String(255),nullable=False)
     registered_on = db.Column(db.DateTime, nullable=False)
     projects = db.relationship('Project', backref='user', lazy=True)
-    user_stories = db.relationship('UserStory', backref='user', lazy=True)
+    #user_stories = db.relationship('UserStory', backref='user', lazy=True)
     def __init__(self, first_name, last_name, email, password):
         self.first_name = first_name
         self.last_name = last_name
@@ -24,15 +24,19 @@ class Project(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     members = db.Column('members', db.String(255))
     finished_user_stories = db.relationship('UserStory', backref='project', lazy=True)
-    user_stories = db.relationship('UserStory', backref='project', lazy=True)
+    #testing here
+
+    tasks = db.Column('tasks', db.VARCHAR)
+    #user_stories = db.relationship('UserStory', backref='project', lazy=True)
     comments = db.relationship('Comment', backref='project', cascade='all, delete-orphan', lazy=True)
     
-    def __init__(self, title, description, user_id, members):
+    def __init__(self, title, description, user_id, members, tasks):
         self.title = title
         self.description = description
         self.date = datetime.date.today()
         self.user_id = user_id
         self.members = members
+        self.tasks = tasks
 
 class UserStory(db.Model):
     id = db.Column(db.Integer, primary_key=True)
