@@ -50,7 +50,7 @@ class CreateProjectView(FlaskForm):
 
     members = TextAreaField('Members (enter with commas separating names): ', validators=[Length(min=1)])
 
-    tasks = TextAreaField('Tasks: ', validators=[Length(min=1)])
+    tasks = TextAreaField('Tasks: (enter with commas separating tasks): ', validators=[Length(min=1)])
 
     submit = SubmitField('Submit')
 
