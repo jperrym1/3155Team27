@@ -40,7 +40,11 @@
                             {% endfor %}
                         </ul>
                     </td>
-                    {% if project.comments %}
+                    
+                    </form>
+                </tr>
+            </table>
+            {% if project.comments %}
                     {% if project.comments|length > 0 %}
                         <h2>Comments</h2>
                         <ul>
@@ -59,8 +63,6 @@
                            {{ form.submit }}
                         </div>
                     </form>
-                </tr>
-            </table>
         </main>
     </body>
 </html>
