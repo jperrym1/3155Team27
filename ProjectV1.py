@@ -55,6 +55,10 @@ def create_project():
             project_name = request.form['project_name']
             description = request.form['description']
             members = request.form['members']
+
+            #considering adding "tasks" and/or "tags" features as an added feature
+            #tasks would act as the checklist while tags would act as identifiers or labels
+            
             new_project = Project(project_name, description, session['user_id'], members)
             db.session.add(new_project)
             db.session.commit()
@@ -147,11 +151,10 @@ def project_comment(project_id):
         if comment.validate_on_submit() and request.method=='POST':
             comment_text = request.form['comment']
             new_comment = Comment(comment_text, project_id)
-           # new_comment = Comment(comment_text, int(project_id), session['user_id'])
             db.session.add(new_comment)
             db.session.commit()
         return redirect(url_for('get_project', project_id=project_id))
     else:
         return redirect(url_for('login'))
-        
+
 app.run(host=os.getenv('IP', '127.0.0.1'), port=int(os.getenv('PORT', 5000)), debug=True)
