@@ -44,9 +44,9 @@
                     </form>
                 </tr>
             </table>
-            <th>Tasks</th>
-            <table>
-                
+            
+            <fieldset>
+                <legend> Tasks: </legend>
                 <tr>
                   <ol type="I">
                     {% for task in project.tasks.split(',') %}
@@ -54,7 +54,7 @@
                     {% endfor %}
                   </ol>  
                 </tr>
-            </table>
+            </fieldset>
             {% if project.comments %}
                     {% if project.comments|length > 0 %}
                         <h2>Comments</h2>
