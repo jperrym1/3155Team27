@@ -66,7 +66,7 @@ def create_project():
             return redirect(url_for('get_projects'))
         return render_template('new.html', form=form, user=session['user'])
     else:
-        redirect(url_for('login'))
+        return redirect(url_for('login'))
 
 
 #edit project
