@@ -48,11 +48,18 @@
             <fieldset>
                 <legend> Tasks: </legend>
                 <tr>
+                    <form action="{{ url_for('update_tasks', project_id=project.id) }}" method="post">
                   <ol type="I">
-                    {% for task in project.tasks.split(',') %}
-                    <li> {{task}}</li>
+                    {% for task in project.tasks %}
+                    {% if task.completed == 1 %}
+                    <li> {{task.description}} | Completed?: <input type="checkbox" name='task' value="{{task.id}}" checked> </li>
+                    {% else %}
+                    <li> {{task.description}} | Completed?: <input type="checkbox" name='task' value="{{task.id}}"> </li>
+                    {% endif %}
                     {% endfor %}
-                  </ol>  
+                  </ol> 
+                    <input style='float: right;' type="submit" value="Update Tasks">
+                </form> 
                 </tr>
             </fieldset>
             {% if project.comments %}

@@ -9,6 +9,7 @@ from database import db
 from data_models import Project as Project
 from data_models import User as User
 from data_models import Comment as Comment
+from data_models import Task as Task
 from views import LoginView, RegisterView, CreateProjectView, CommentOnProject
 import bcrypt
 
@@ -58,11 +59,16 @@ def create_project():
 
             #considering adding "tasks" and/or "tags" features as an added feature
             #tasks would act as the checklist while tags would act as identifiers or labels
-            tasks = request.form['tasks']
+            tasks = request.form['tasks'].split(',')
 
-            new_project = Project(project_name, description, session['user_id'], members, tasks)
+            new_project = Project(project_name, description, session['user_id'], members)
             db.session.add(new_project)
             db.session.commit()
+            db.session.refresh(new_project)
+            for task in tasks:
+                new_task = Task(task, new_project.id)
+                db.session.add(new_task)
+                db.session.commit()
             return redirect(url_for('get_projects'))
         return render_template('new.html', form=form, user=session['user'])
     else:
@@ -78,6 +84,12 @@ def edit_project(project_id):
             project_name = request.form['project_name']
             description = request.form['description']
             members = request.form['members']
+            db.session.query(Task).filter_by(project_id=project_id).delete()
+            tasks = request.form['tasks'].split(',')
+            for task in tasks:
+                new_task = Task(task, project_id)
+                db.session.add(new_task)
+                db.session.commit()
             modified_project = db.session.query(Project).filter_by(id=project_id).one()
             modified_project.title = project_name
             modified_project.description = description
@@ -87,10 +99,33 @@ def edit_project(project_id):
             return redirect(url_for('get_projects'))
         else:
             project = db.session.query(Project).filter_by(id=project_id).one()
+            task_string = ''
+            for task in db.session.query(Task).filter_by(project_id=project_id).all():
+                task_string += task.description + ', '
+            form.tasks.data = task_string[:len(task_string)-2]
             form.members.data = project.members
             form.project_name.data = project.title
             form.description.data = project.description
             return render_template('new.html', form=form, user=session['user'], project=project)
+    else:
+        return redirect(url_for('login'))
+
+@app.route('/projects/<project_id>/update_tasks', methods=['GET', 'POST'])
+def update_tasks(project_id):
+    if session.get('user'):
+        if request.method == 'POST':
+            task_list = request.form.getlist('task')
+            project_task = db.session.query(Task).filter_by(project_id=project_id)
+            for task in project_task:
+                if str(task.id) in task_list:
+                    task.completed = 1
+                else:
+                    task.completed = 0
+                db.session.add(task)
+            db.session.commit()
+            return redirect(url_for('get_project', project_id=project_id))
+        else:
+            return redirect(url_for('get_project', project_id=project_id))
     else:
         return redirect(url_for('login'))
 
@@ -99,6 +134,7 @@ def edit_project(project_id):
 def delete_project(project_id):
     if session.get('user'):
         my_project = db.session.query(Project).filter_by(id=project_id).one()
+        db.session.query(Task).filter_by(project_id=my_project.id).delete()
         db.session.delete(my_project)
         db.session.commit()
         return redirect(url_for('get_projects'))

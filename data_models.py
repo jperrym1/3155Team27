@@ -23,20 +23,30 @@ class Project(db.Model):
     date = db.Column('date', db.String(50))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     members = db.Column('members', db.String(255))
-    finished_user_stories = db.relationship('UserStory', backref='project', lazy=True)
+
     #testing here
 
-    tasks = db.Column('tasks', db.VARCHAR)
+    tasks = db.relationship('Task', backref='project', lazy = True)
     #user_stories = db.relationship('UserStory', backref='project', lazy=True)
     comments = db.relationship('Comment', backref='project', cascade='all, delete-orphan', lazy=True)
     
-    def __init__(self, title, description, user_id, members, tasks):
+    def __init__(self, title, description, user_id, members):
         self.title = title
         self.description = description
         self.date = datetime.date.today()
         self.user_id = user_id
         self.members = members
-        self.tasks = tasks
+
+class Task(db.Model):
+    id = db.Column('id', db.Integer, primary_key=True)
+    description = db.Column('description', db.VARCHAR, nullable=False)
+    completed = db.Column('completed', db.Integer)
+    project_id = db.Column(db.Integer, db.ForeignKey('project.id'), nullable=False)
+
+    def __init__(self, description, project_id):
+        self.description = description
+        self.completed = 0
+        self.project_id = project_id
 
 class UserStory(db.Model):
     id = db.Column(db.Integer, primary_key=True)

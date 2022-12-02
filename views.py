@@ -37,9 +37,9 @@ class RegisterView(FlaskForm):
         Length(min=6, max=30)
     ])
     submit = SubmitField('Submit')
-    def validate_email(self, field):
-        if db.session.query(User).filter_by(email=field.data).count() != 0:
-            raise ValidationError('Email already has account associated with it.')
+    # def validate_email(self, field):
+    #     if db.session.query(User).filter_by(email=field.data).count() != 0:
+    #         raise ValidationError('Email already has account associated with it.')
 
 class CreateProjectView(FlaskForm):
     class Meta:

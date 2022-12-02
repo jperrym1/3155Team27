@@ -11,4 +11,5 @@ table{
     -webkit-box-shadow: 10px 10px 15px 0px rgba(50, 50, 50, 0.50);
     -moz-box-shadow:    10px 10px 15px 0px rgba(50, 50, 50, 0.50);
     box-shadow:         10px 10px 15px 0px rgba(50, 50, 50, 0.50);
+    margin-bottom: 25px;
 }
