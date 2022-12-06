@@ -28,7 +28,7 @@ with app.app_context():
 @app.route('/index')
 def index():
     if session.get('user'):
-        print('theme:', type(session['theme']))
+        #print('theme:', type(session['theme']))
         return render_template('index.html', user=session['user'], theme=session["theme"])
     return render_template('index.html')
 

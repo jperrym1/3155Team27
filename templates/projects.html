@@ -33,6 +33,7 @@
                     <th>Project Name</th>
                     <th>Description</th>
                     <th>Members</th>
+                    <th>Views</th>
                 </tr>
                 {% for project in projects %}
                 <tr>
@@ -44,7 +45,9 @@
                             <li>{{member}}</li>
                             {% endfor %}
                         </ul>
+
                     </td>
+                    <td>{{ project.views }}</td>
                     <td>
                         <a href="{{ url_for('edit_project', project_id=project.id) }}">Edit</a>
                     </td>
