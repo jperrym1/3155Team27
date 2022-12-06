@@ -4,7 +4,11 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="description" content="Cubed Project Management">
-        <link rel="stylesheet" href="{{ url_for('static', filename='default.css') }}">
+        {% if theme == 1 %}
+            <link rel="stylesheet" href="{{ url_for('static', filename='dark.css') }}">
+        {% else %}
+            <link rel="stylesheet" href="{{ url_for('static', filename='default.css') }}">
+        {% endif %}
         <title>Cubed Project Management - New Project</title>
     </head>
     <body>

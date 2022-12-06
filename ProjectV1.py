@@ -28,7 +28,8 @@ with app.app_context():
 @app.route('/index')
 def index():
     if session.get('user'):
-        return render_template('index.html', user=session['user'])
+        print('theme:', type(session['theme']))
+        return render_template('index.html', user=session['user'], theme=session["theme"])
     return render_template('index.html')
 
 #view list of projects
@@ -36,7 +37,7 @@ def index():
 def get_projects():
     if session.get('user'):
         projects = db.session.query(Project).filter_by(user_id=session['user_id']).all()
-        return render_template('projects.html', user=session['user'], projects=projects)
+        return render_template('projects.html', user=session['user'], projects=projects, theme=session['theme'])
     return redirect(url_for('login'))
 
 #view particular project
@@ -44,8 +45,11 @@ def get_projects():
 def get_project(project_id):
     if session.get('user'):
         project = db.session.query(Project).filter_by(id=project_id, user_id=session['user_id']).one()
+        project.views = project.views + 1
+        db.session.add(project)
+        db.session.commit()
         form = CommentOnProject()
-        return render_template('project.html', project=project,user=session['user'], form=form)
+        return render_template('project.html', project=project,user=session['user'], form=form, theme=session['theme'])
 
 #create project
 @app.route('/projects/new', methods=['GET', 'POST'])
@@ -70,7 +74,7 @@ def create_project():
                 db.session.add(new_task)
                 db.session.commit()
             return redirect(url_for('get_projects'))
-        return render_template('new.html', form=form, user=session['user'])
+        return render_template('new.html', form=form, user=session['user'], theme=session['theme'])
     else:
         return redirect(url_for('login'))
 
@@ -106,7 +110,7 @@ def edit_project(project_id):
             form.members.data = project.members
             form.project_name.data = project.title
             form.description.data = project.description
-            return render_template('new.html', form=form, user=session['user'], project=project)
+            return render_template('new.html', form=form, user=session['user'], project=project, theme=session['theme'])
     else:
         return redirect(url_for('login'))
 
@@ -150,6 +154,7 @@ def login():
             # password match add user info to session
             session['user'] = the_user.first_name
             session['user_id'] = the_user.id
+            session['theme'] = 0
             return redirect(url_for('get_projects'))
         login.password.errors = ["Incorrect username or password."]
         return render_template("login.html", form=login)
@@ -171,6 +176,7 @@ def register():
         db.session.commit()
         session['user'] = first_name
         session['user_id'] = new_user.id
+        session['theme'] = 0
         return redirect(url_for('get_projects'))
     return render_template('register.html', form=form)
 
@@ -194,4 +200,17 @@ def project_comment(project_id):
     else:
         return redirect(url_for('login'))
 
+@app.route('/theme', methods=['GET','POST'])
+def change_theme_page():
+    if session.get('user'):
+        return render_template('theme.html', theme=session['theme'], user=session['user'])
+    else:
+        return redirect(url_for('login'))
+@app.route('/change_theme/<theme_num>', methods=['GET','POST'])
+def change_theme(theme_num):
+    if session.get('user'):
+        session['theme'] = int(theme_num)
+        return redirect(url_for('change_theme_page', theme=session['theme'], user=session['user']))
+    else:
+        return redirect(url_for('login'))
 app.run(host=os.getenv('IP', '127.0.0.1'), port=int(os.getenv('PORT', 5000)), debug=True)

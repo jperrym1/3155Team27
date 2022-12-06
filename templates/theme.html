@@ -22,18 +22,17 @@
                 <a href="{{url_for('index')}}">Home</a>
                 <a href="{{url_for('get_projects')}}">View Projects</a>
                 <a href="{{url_for('create_project')}}">Create Project</a>
-                <a href="{{url_for('change_theme_page')}}">Theme</a>
         </nav>
         {% if user %}
         <h1>Welcome to The Cubed Project Management Application, {{user}}, We hope you have a great day!</h1>
         {% else %}
         <h1>Welcome to The Cubed Project Management Application, We hope you have a great day!</h1>
         {% endif %}
-        <h2>This site is used to manage and organize Tasks and Projects</h2>
+        <h2>Select a Theme</h2>
+        <h2>Theme Num: {{theme}}</h2>
         <div class="menu-list">
-            <div class="menu-item"><a href="{{url_for('index')}}">Home</a></div>
-            <div class="menu-item"><a href="{{url_for('get_projects')}}">View Projects</a></div>
-            <div class="menu-item"><a href="{{url_for('create_project')}}">Create Project</a></div>
+            <div class="menu-item"><a href="{{url_for('change_theme', theme_num=0)}}">Light Theme</a></div>
+            <div class="menu-item"><a href="{{url_for('change_theme', theme_num=1)}}">Dark Theme</a></div>
         </div>
     </body>
 </html>

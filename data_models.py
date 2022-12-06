@@ -23,7 +23,7 @@ class Project(db.Model):
     date = db.Column('date', db.String(50))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     members = db.Column('members', db.String(255))
-
+    views = db.Column('views', db.Integer)
     #testing here
 
     tasks = db.relationship('Task', backref='project', lazy = True)
@@ -36,6 +36,7 @@ class Project(db.Model):
         self.date = datetime.date.today()
         self.user_id = user_id
         self.members = members
+        self.views = 0
 
 class Task(db.Model):
     id = db.Column('id', db.Integer, primary_key=True)
