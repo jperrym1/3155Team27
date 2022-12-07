@@ -46,7 +46,10 @@ nav a:hover{
   text-decoration: none;
   color: inherit;
 }
+/*
+commented out so that when you scroll over index menu items they
+are still readable instead of being white text on white background
 
 a:visited{
-    color: whitesmoke;
-}
+  color: whitesmoke;
+}*/
