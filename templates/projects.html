@@ -38,7 +38,7 @@
                 </tr>
                 {% for project in projects %}
                 <tr>
-                    <td><a href='{{ url_for("get_project", project_id=project.id) }}'>{{ project.title }}</a></td>
+                    <td><a class='button' href='{{ url_for("get_project", project_id=project.id) }}'>{{ project.title }}</a></td>
                     <td>{{ project.description }}</td>
                     <td>
                         <ul>
@@ -50,7 +50,7 @@
                     </td>
                     <td>{{ project.views }}</td>
                     <td>
-                        <a href="{{ url_for('edit_project', project_id=project.id) }}">Edit</a>
+                        <a class='button' href="{{ url_for('edit_project', project_id=project.id) }}">Edit</a>
                     </td>
                     <td>
                         <form action="{{ url_for('delete_project', project_id=project.id) }}" method="post">

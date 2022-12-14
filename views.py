@@ -33,7 +33,7 @@ class RegisterView(FlaskForm):
         DataRequired(message="Please enter a password."),
         EqualTo('confirmPassword', message='Passwords must match')
     ])
-    confirmPassword = PasswordField('Confirm Password', validators=[
+    confirmPassword = PasswordField('Confirm Password: ', validators=[
         Length(min=6, max=30)
     ])
     submit = SubmitField('Submit')
