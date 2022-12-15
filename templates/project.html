@@ -35,6 +35,7 @@
                     <th>Description</th>
                     <th>Members</th>
                     <th>Views</th>
+                    <th>Edit</th>
                 </tr>
                 <tr>
                     <td>{{ project.title }}</td>
@@ -48,6 +49,7 @@
                     </td>
                     <td>{{project.views}}</td>
                     </form>
+                    <td><a class='button' href="{{ url_for('edit_project', project_id=project.id) }}">Edit</a></td>
                 </tr>
             </table>
             
